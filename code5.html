@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuật Toán Prim</title>
+</head>
+<body>
+    <h1>Ví Dụ Về Thuật Toán Prim</h1>
+
+    <button onclick="runPrim()">Chạy</button>
+    <div id="result"></div>
+
+    <script>
+        function prim(adjacencyMatrix) {
+            const vertices = adjacencyMatrix.length;
+            const parent = Array(vertices).fill(null);
+            const key = Array(vertices).fill(Number.POSITIVE_INFINITY);
+            const mstSet = Array(vertices).fill(false);
+
+            key[0] = 0;
+
+            for (let count = 0; count < vertices - 1; count++) {
+                const u = minKey(key, mstSet);
+                mstSet[u] = true;
+
+                for (let v = 0; v < vertices; v++) {
+                    if (adjacencyMatrix[u][v] && !mstSet[v] && adjacencyMatrix[u][v] < key[v]) {
+                        parent[v] = u;
+                        key[v] = adjacencyMatrix[u][v];
+                    }
+                }
+            }
+
+            const result = [];
+            for (let i = 1; i < vertices; i++) {
+                result.push({ edge: [parent[i], i], weight: adjacencyMatrix[i][parent[i]] });
+            }
+
+            return result;
+        }
+
+        function minKey(key, mstSet) {
+            let min = Number.POSITIVE_INFINITY;
+            let minIndex = -1;
+
+            for (let v = 0; v < key.length; v++) {
+                if (!mstSet[v] && key[v] < min) {
+                    min = key[v];
+                    minIndex = v;
+                }
+            }
+
+            return minIndex;
+        }
+
+        function runPrim() {
+            const adjacencyMatrix = [
+                [0, 2, 0, 6, 0],
+                [2, 0, 3, 8, 5],
+                [0, 3, 0, 0, 7],
+                [6, 8, 0, 0, 9],
+                [0, 5, 7, 9, 0]
+            ];
+
+            const result = prim(adjacencyMatrix);
+            console.log("Cây khung nhỏ nhất:", result);
+
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = "Cây khung nhỏ nhất: " + JSON.stringify(result);
+        }
+    </script>
+</body>
+</html>

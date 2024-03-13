@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Toán Liệt Kê</title>
+    <style>
+        h1 {
+            font-size: 40px;
+        }
+        h2 {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bài Toán Liệt Kê</h1>
+    <h2>Liệt kê cách chọn 2 số từ tập hợp:</h2>
+
+    <!-- Thêm ô nhập liệu -->
+    <label for="tapHopSo">Nhập tập hợp số (phân tách bằng dấu phẩy): </label>
+    <input type="text" id="tapHopSo" placeholder="1, 2, 3, 4">
+
+    <!-- Nút kích hoạt liệt kê -->
+    <button onclick="XuatKetQua()">Kết Quả</button>
+
+    <!-- Hiển thị kết quả -->
+    <div id="KetQua"></div>
+
+    <script>
+        function LietKeCapSo(tapHop) {
+            const TapHop = tapHop.split(',').map(Number);
+            const KetQua = [];
+
+            for (let i = 0; i < TapHop.length - 1; i++) {
+                for (let j = i + 1; j < TapHop.length; j++) {
+                    KetQua.push([TapHop[i], TapHop[j]]);
+                }
+            }
+
+            return KetQua;
+        }
+
+        function XuatKetQua() {
+            const inputTapHop = document.getElementById("tapHopSo").value;
+            const CacCapSo = LietKeCapSo(inputTapHop);
+
+            // Kiểm tra xem tập hợp có hợp lệ hay không
+            if (CacCapSo.length === 0) {
+                alert("Nhập tập hợp số hợp lệ!");
+                return;
+            }
+
+            console.log("Các cách chọn 2 số:", CacCapSo);
+
+            let kq = document.getElementById("KetQua");
+            kq.innerHTML = "Các cách chọn 2 số: " + JSON.stringify(CacCapSo);
+        }
+    </script>
+</body>
+</html>

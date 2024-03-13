@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Toán Tồn Tại</title>
+    <style>
+      h1 {
+        font-size: 40px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+    </style>
+</head>
+<body>
+    <h1>Bài Toán Tồn Tại</h1>
+    <h2>Bài toán 4 màu: Cho bản đồ gồm N quốc gia (mô tả bằng ma trận kề: 2 nước i và j là hàng xóm 
+      với nhà nhau thì Cij=1, ngược lại Cij=0). Hãy tô bằng 4 màu bản đồ sau cho 2 nước là hàng xóm 
+      với nhau thì khác màu nhau</h2>
+    <!-- Thêm một button để kích hoạt hàm toMauBanDo -->
+    <button onclick="ToMauBanDo()">Tô Màu Bản Đồ</button>
+    <!-- Một div để hiển thị kết quả của hàm toMauBanDo -->
+    <div id="KetQua"></div>
+
+    <script>
+        function ToMauBanDo() {
+          // Ma trận kề mẫu (1 là hàng xóm, 0 là không)
+          const adjacencyMatrix = [
+            [0, 1, 1, 1],
+            [1, 0, 1, 0],
+            [1, 1, 0, 1],
+            [1, 0, 1, 0],
+          ];
+
+          const N = adjacencyMatrix.length; // Số quốc gia
+          const colors = Array(N).fill(0); // Mảng lưu màu của từng quốc gia
+
+          // Hàm kiểm tra xem việc tô màu có hợp lệ không
+          function isValidColor(node, color) {
+            for (let i = 0; i < N; i++) {
+              if (adjacencyMatrix[node][i] === 1 && colors[i] === color) {
+                return false; // Hai quốc gia hàng xóm không được có màu giống nhau
+              }
+            }
+            return true;
+          }
+
+          // Hàm đệ quy để thực hiện tô màu
+          function colorMap(node) {
+            for (let color = 1; color <= 4; color++) {
+              if (isValidColor(node, color)) {
+                colors[node] = color; // Gán màu cho quốc gia
+                if (node === N - 1) {
+                  return true; // Đã tô màu hết các quốc gia
+                }
+                if (colorMap(node + 1)) {
+                  return true; // Tiếp tục tô màu cho quốc gia kế tiếp
+                }
+                colors[node] = 0; // Backtracking nếu không tìm được màu hợp lệ
+              }
+            }
+            return false; // Không tìm được màu hợp lệ cho quốc gia hiện tại
+          }
+
+          // Bắt đầu từ quốc gia đầu tiên
+          if (!colorMap(0)) {
+            console.log("Không thể tô màu theo yêu cầu.");
+            document.getElementById("KetQua").innerHTML = "Không thể tô màu theo yêu cầu.";
+          } else {
+            console.log("Tô màu thành công:", colors);
+            document.getElementById("KetQua").innerHTML = "Tô màu thành công: " + colors.join(', ');
+          }
+        }
+    </script>
+</body>
+</html>

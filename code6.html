@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <title>Thuật Toán Floyd</title>
+</head>
+<body>
+    <h1>Ví Dụ Về Thuật Toán Floyd</h1>
+    <button onclick="runFloydWarshall()">Chạy</button>
+    <div id="result"></div>
+
+    <script>
+        // Số lớn đại diện cho vô cùng (không có kết nối)
+        const INF = Number.POSITIVE_INFINITY;
+
+        // Hàm thực hiện thuật toán Floyd-Warshall
+        function floydWarshall(graph) {
+            const V = graph.length;
+            const dist = [];
+
+            // Khởi tạo ma trận khoảng cách
+            for (let i = 0; i < V; i++) {
+                dist[i] = [];
+                for (let j = 0; j < V; j++) {
+                    if (i === j) {
+                        dist[i][j] = 0;  // Các đỉnh trên đường chéo là 0
+                    } else if (graph[i][j] === 0) {
+                        dist[i][j] = INF;  // Các đỉnh không có kết nối được đặt là vô cùng
+                    } else {
+                        dist[i][j] = graph[i][j];  // Các đỉnh có kết nối giữa chúng
+                    }
+                }
+            }
+
+            // Áp dụng thuật toán Floyd-Warshall
+            for (let k = 0; k < V; k++) {
+                for (let i = 0; i < V; i++) {
+                    for (let j = 0; j < V; j++) {
+                        if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                        }
+                    }
+                }
+            }
+
+            return dist;
+        }
+
+        // Hàm chạy thuật toán khi nhấn nút
+        function runFloydWarshall() {
+            // Đồ thị mẫu
+            const graph = [
+                [0, 3, INF, 7],
+                [8, 0, 2, INF],
+                [5, INF, 0, 1],
+                [2, INF, INF, 0]
+            ];
+
+            // Gọi thuật toán và hiển thị kết quả
+            const result = floydWarshall(graph);
+            console.log("Ma trận khoảng cách:", result);
+
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = "<h2>Ma trận khoảng cách:</h2>" + displayMatrix(result);
+        }
+
+        // Hàm hiển thị ma trận dưới dạng HTML
+        function displayMatrix(matrix) {
+            let display = "<table border='1'>";
+            for (let i = 0; i < matrix.length; i++) {
+                display += "<tr>";
+                for (let j = 0; j < matrix[i].length; j++) {
+                    display += "<td>" + (matrix[i][j] === INF ? "INF" : matrix[i][j]) + "</td>";
+                }
+                display += "</tr>";
+            }
+            display += "</table>";
+            return display;
+        }
+    </script>
+</body>
+</html>

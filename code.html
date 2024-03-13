@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Toán Đếm</title>
+    <style>
+      h1 {
+        font-size: 40px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+    </style>
+</head>
+<body>
+    <h1>Bài Toán Đếm</h1>
+    <h2>Một bảng gồm 5 hàng và 4 cột. Bạn muốn chọn 2 ô trên bảng đó. Có bao nhiêu cách chọn?</h2>
+    <input type="submit" value="Kết Quả" onclick="baitoandem()">
+    <div id="baitoandem"></div>
+
+    <script>
+        function baitoandem(){
+// Hàm tính giai thừa
+        function GiaiThua(n) {
+          if (n === 0 || n === 1) {
+            return 1;
+          } else {
+            return n * GiaiThua(n - 1);
+          }
+        }
+
+// Hàm tính số cách chọn
+        function TinhToHop() {
+          
+// Số hàng và số cột
+        const Hang = 5;
+        const Cot = 4;
+
+// Số ô bạn muốn chọn
+        const So_o_chon = 2;
+        const So_cach_chon = GiaiThua(Hang*Cot)/(GiaiThua(So_o_chon)*GiaiThua(Hang*Cot-So_o_chon));
+        return So_cach_chon;
+        }
+
+        console.log("Số cách chọn là: ", TinhToHop());
+        let kq = document.getElementById("baitoandem")
+        kq.innerHTML = "Số cách chọn là: " + TinhToHop() 
+    }
+    </script>    
+</body>
+</html>
